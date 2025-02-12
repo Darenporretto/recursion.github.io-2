@@ -5,11 +5,29 @@
 // Example:  5! = 5 x 4 x 3 x 2 x 1 = 120
 // factorial(5);  // 120
 var factorial = function(n) {
+  // Return null for negative integers
+  if (n < 0) {
+    return null;
+  }
+  // Base case
+  if (n === 0 || n === 1) {
+    return 1;
+  }
+
+  // Recursive statement
+  return n * factorial(n-1);
 };
 
 // 2. Compute the sum of an array of integers.
 // Example:  sum([1, 2, 3, 4, 5, 6]);  // 21
 var sum = function(array) {
+  // Base case
+  if (array.length === 0) {
+    return 0;
+  }
+
+  // Recursion
+  return array[0] + sum(array.slice(1));
 };
 
 // 3. Sum all numbers in an array containing nested arrays.
@@ -19,17 +37,56 @@ var arraySum = function(array) {
 
 // 4. Check if a number is even.
 var isEven = function(n) {
+  // Base case
+  if (n === 0) {
+    return true;
+  }
+
+  if (n === 1) {
+    return false;
+  }
+
+  if (n < 0) {
+    return isEven(-n);
+  }
+
+  // Recursion
+  return isEven(n - 2);
 };
 
 // 5. Sum all integers below a given integer.
 // sumBelow(10); // 45
 // sumBelow(7); // 21
 var sumBelow = function(n) {
+  // Base
+  if (n === 0) {
+    return 0;
+  }
+
+  if (n > 0) {
+    return (n - 1) + sumBelow(n - 1);
+  }
+
+  // Recursion
+  return (n + 1) + sumBelow(n + 1);
 };
 
 // 6. Get the integers in range (x, y).
 // Example:  range(2, 9);  // [3, 4, 5, 6, 7, 8]
 var range = function(x, y) {
+  // Base
+  if (Math.abs(x - y) <= 1) {
+    return [];
+  }
+
+  // Recursion if x is less than y, collect integers in increasing order
+  if (x < y) {
+    return [x + 1].concat(range(x + 1, y));
+  }
+
+  // If x is greater than y, collect in decreasing order
+  return [x - 1].concat(range(x - 1, y));
+  
 };
 
 // 7. Compute the exponent of a number.
@@ -38,6 +95,18 @@ var range = function(x, y) {
 // Example:  exponent(4,3);  // 64
 // https://www.khanacademy.org/computing/computer-science/algorithms/recursive-algorithms/a/computing-powers-of-a-number
 var exponent = function(base, exp) {
+  // Base case: if the exponent is 0, return 1
+  if (exp === 0) {
+    return 1;
+}
+
+// If the exponent is positive, multiply base recursively
+if (exp > 0) {
+    return base * exponent(base, exp - 1);
+}
+
+// If the exponent is negative, calculate the positive exponent and return the reciprocal
+return 1 / exponent(base, -exp);
 };
 
 // 8. Determine if a number is a power of two.
@@ -45,14 +114,50 @@ var exponent = function(base, exp) {
 // powerOfTwo(16); // true
 // powerOfTwo(10); // false
 var powerOfTwo = function(n) {
+  // Base case: if n is less than or equal to 0, it's not a power of two
+  if (n <= 0) {
+    return false;
+}
+// Base case: if n is 1, it's a power of two
+if (n === 1) {
+    return true;
+}
+// Recursive case: if n is divisible by 2, divide and check recursively
+if (n % 2 === 0) {
+    return powerOfTwo(n / 2);
+}
+// If n is not divisible by 2, it's not a power of two
+return false;
 };
 
 // 9. Write a function that accepts a string a reverses it.
 var reverse = function(string) {
+   // Base case: If the string is empty, return an empty string
+   if (string === "") {
+    return "";
+}
+
+// Recursive case: Take the first character and append the reversed rest of the string
+return reverse(string.slice(1)) + string[0];
 };
 
 // 10. Write a function that determines if a string is a palindrome.
 var palindrome = function(string) {
+  // Remove spaces and convert to lowercase to ignore spaces and case
+  string = string.replace(/\s+/g, '').toLowerCase();
+
+  // Base case: If the string length is 0 or 1, it's a palindrome
+  if (string.length <= 1) {
+      return true;
+  }
+
+  // Check if the first and last characters are the same
+  if (string[0] !== string[string.length - 1]) {
+      return false;
+  }
+
+  // Recursive case: Check the substring excluding the first and last characters
+  return palindrome(string.slice(1, string.length - 1));
 };
 
 // 11. Write a function that returns the remainder of x divided by y without using the
@@ -61,12 +166,21 @@ var palindrome = function(string) {
 // modulo(17,5) // 2
 // modulo(22,6) // 4
 var modulo = function(x, y) {
+  
 };
 
 // 12. Write a function that multiplies two numbers without using the * operator  or
 // JavaScript's Math object.
 // ATTENTION DO NOT LEAVE COMMENTS IN THIS FUNCTION. The test is looking for any ('/').
 var multiply = function(x, y) {
+  if (y === 0) {
+    return 0;
+}
+if (y > 0) {
+    return x + multiply(x, y - 1);
+} else {
+    return -x + multiply(x, y + 1);
+}
 };
 
 // 13. Write a function that divides two numbers without using the / operator  or
@@ -88,21 +202,59 @@ var gcd = function(x, y) {
 // compareStr('', '') // true
 // compareStr('tomato', 'tomato') // true
 var compareStr = function(str1, str2) {
+  // Base case 1: both strings are empty
+  if (str1 === "" && str2 === "") {
+    return true;
+}
+
+// Base case 2: one string is empty and the other is not
+if (str1 === "" || str2 === "") {
+    return false;
+}
+
+// Base case 3: characters do not match
+if (str1[0] !== str2[0]) {
+    return false;
+}
+
+// Recursive case: compare the rest of the strings
+return compareStr(str1.slice(1), str2.slice(1));
 };
 
 // 16. Write a function that accepts a string and creates an array where each letter
 // occupies an index of the array.
 var createArray = function(str){
+  // Base case: if the string is empty, return an empty array
+  if (str === "") {
+    return [];
+}
+
+// Recursive case: take the first character and call createArray on the rest of the string
+return [str[0]].concat(createArray(str.slice(1)));
 };
 
 // 17. Reverse the order of an array
 var reverseArr = function (array) {
+  // Base case: if the array is empty or has only one element, it's already reversed
+  if (array.length <= 1) {
+    return array;
+}
+
+// Recursive case: reverse the rest of the array and add the first element at the end
+return reverseArr(array.slice(1)).concat(array[0]);
 };
 
 // 18. Create a new array with a given value and length.
 // buildList(0,5) // [0,0,0,0,0]
 // buildList(7,3) // [7,7,7]
 var buildList = function(value, length) {
+  // Base case: if the length is 0, return an empty array
+  if (length === 0) {
+    return [];
+}
+
+// Recursive case: add the value to the array and call recursively with reduced length
+return [value].concat(buildList(value, length - 1));
 };
 
 // 19. Count the occurence of a value inside a list.
